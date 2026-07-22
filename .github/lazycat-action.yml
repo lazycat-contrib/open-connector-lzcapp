@@ -1,0 +1,47 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/open-connector.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: open-connector
+
+build:
+  run_buildscript: false
+
+images:
+  - id: open-connector
+    target: service
+    service: open-connector
+    source: ghcr.io/oomol-lab/open-connector
+    channel: stable
+    tag_regex: '^v?[0-9]+\.[0-9]+\.[0-9]+$'
+    delivery:
+      mode: lazycat
+
+stores:
+  official:
+    enabled: true
+    skip_if_version_exists: true
+    create_if_missing: true
+    changelog_locales: [zh, en]
+    retry:
+      enabled: false
+    application:
+      language: zh
+      name: OpenConnector
+      source: https://github.com/oomol-lab/open-connector
+      source_author: oomol-lab
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: OpenConnector
+    summary: 面向 AI Agent 的开源连接器网关

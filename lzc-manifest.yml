@@ -1,0 +1,43 @@
+application:
+  subdomain: open-connector
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://open-connector:3000/
+  injects:
+    - id: passwordless-admin-console
+      on: request
+      auth_required: true
+      when:
+        - /api/auth/session
+        - /docs
+        - /docs/*
+      do: |
+        ctx.headers.set("Authorization", "Bearer {{ stable_secret "open_connector_admin_token_v1" }}");
+
+services:
+  open-connector:
+    # upstream: ghcr.io/oomol-lab/open-connector:v1.3.0
+    image: registry.lazycat.cloud/czyt/oomol-lab/open-connector:9e7c92eef1b65cf6
+    environment:
+      - OOMOL_CONNECT_DATA_DIR=/app/data
+      - OOMOL_CONNECT_ORIGIN=https://{{.S.AppDomain}}
+      - OOMOL_CONNECT_ENCRYPTION_KEY={{ stable_secret "open_connector_encryption_key_v1" }}
+      - OOMOL_CONNECT_ADMIN_TOKEN={{ stable_secret "open_connector_admin_token_v1" }}
+    binds:
+      - /lzcapp/var/data:/app/data
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - scripts/healthcheck.ts
+      interval: 30s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+    cpus: 2
+    mem_limit: 1g
+
+usage: |
+  打开应用即可免密进入管理控制台。请在“访问 / Access”页面创建 Runtime Token，供 MCP、HTTP/OpenAPI 或 Agent 客户端调用 /mcp 与 /v1 接口。应用数据保存在持久化目录中；请勿修改加密密钥种子，否则已保存的凭据将无法解密。

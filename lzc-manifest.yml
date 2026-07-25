@@ -15,11 +15,10 @@ application:
         - /docs/*
       do: |
         ctx.headers.set("Authorization", "Bearer {{ stable_secret "open_connector_admin_token_v1" }}");
-
 services:
   open-connector:
-    # upstream: ghcr.io/oomol-lab/open-connector:v1.3.0
-    image: registry.lazycat.cloud/czyt/oomol-lab/open-connector:9e7c92eef1b65cf6
+    # upstream: ghcr.io/oomol-lab/open-connector:v1.3.1
+    image: registry.lazycat.cloud/czyt/oomol-lab/open-connector:b41d869d0cb5382c
     environment:
       - OOMOL_CONNECT_DATA_DIR=/app/data
       - OOMOL_CONNECT_ORIGIN=https://{{.S.AppDomain}}
@@ -38,6 +37,5 @@ services:
       retries: 3
     cpus: 2
     mem_limit: 1g
-
 usage: |
   打开应用即可免密进入管理控制台。请在“访问 / Access”页面创建 Runtime Token，供 MCP、HTTP/OpenAPI 或 Agent 客户端调用 /mcp 与 /v1 接口。应用数据保存在持久化目录中；请勿修改加密密钥种子，否则已保存的凭据将无法解密。

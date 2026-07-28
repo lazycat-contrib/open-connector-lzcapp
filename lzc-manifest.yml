@@ -17,8 +17,8 @@ application:
         ctx.headers.set("Authorization", "Bearer {{ stable_secret "open_connector_admin_token_v1" }}");
 services:
   open-connector:
-    # upstream: ghcr.io/oomol-lab/open-connector:v1.3.1
-    image: registry.lazycat.cloud/czyt/oomol-lab/open-connector:b41d869d0cb5382c
+    # upstream: ghcr.io/oomol-lab/open-connector:v1.3.2
+    image: registry.lazycat.cloud/czyt/oomol-lab/open-connector:bcf68a343c7c5e26
     environment:
       - OOMOL_CONNECT_DATA_DIR=/app/data
       - OOMOL_CONNECT_ORIGIN=https://{{.S.AppDomain}}

@@ -1,5 +1,5 @@
 package: cloud.lazycat.app.open-connector
-version: 1.3.3
+version: 1.3.5
 name: OpenConnector
 description: 面向 AI Agent 的开源连接器网关，提供 MCP、HTTP/OpenAPI 和 Web 控制台
 min_os_version: 1.5.0
